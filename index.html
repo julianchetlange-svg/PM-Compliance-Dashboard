@@ -6,22 +6,18 @@
 <title>PM Compliance Dashboard — McCoy's Building Supply</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F5F5F0;--fg:#1A2E1A;--card:#FFFFFF;--border:#D4DDD0;--muted:#5C715C;--accent:#1B6B2A;--accent2:#D4A017;--row-hover:#EDF5ED;--green-dark:#14522A;--green-mid:#1B6B2A;--green-light:#2D8B3E;--yellow:#D4A017;--yellow-light:#F0C94C;--yellow-bg:rgba(212,160,23,0.10)}
+:root{--bg:#F5F5F0;--fg:#1A2E1A;--card:#FFFFFF;--border:#D4DDD0;--muted:#5C715C;--accent:#1B6B2A;--accent2:#D4A017;--row-hover:#EDF5ED;--green-dark:#14522A;--green-mid:#1B6B2A;--green-light:#2D8B3E;--yellow:#D4A017;--yellow-light:#F0C94C}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans','Segoe UI',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;padding:22px 26px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{text-align:left;padding:9px 10px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;font-family:'JetBrains Mono',monospace;white-space:nowrap;user-select:none;border-bottom:2px solid var(--border)}
-th.sortable{cursor:pointer}
-th.active{color:var(--green-dark)}
+th.sortable{cursor:pointer}th.active{color:var(--green-dark)}
 td{padding:8px 10px;font-size:11px;border-bottom:1px solid #E8EDE5}
 tr:hover{background:var(--row-hover)!important}
 input::placeholder{color:#8A9E8A}
-::-webkit-scrollbar{height:6px}
-::-webkit-scrollbar-track{background:#E8EDE5}
-::-webkit-scrollbar-thumb{background:#B0C4A8;border-radius:3px}
-.mono{font-family:'JetBrains Mono',monospace}
-.grotesk{font-family:'Space Grotesk',sans-serif}
+::-webkit-scrollbar{height:6px}::-webkit-scrollbar-track{background:#E8EDE5}::-webkit-scrollbar-thumb{background:#B0C4A8;border-radius:3px}
+.mono{font-family:'JetBrains Mono',monospace}.grotesk{font-family:'Space Grotesk',sans-serif}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,82,42,0.06)}
 .kpi-strip{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;flex:1 1 0;min-width:150px;box-shadow:0 1px 3px rgba(20,82,42,0.06)}
@@ -35,26 +31,29 @@ input::placeholder{color:#8A9E8A}
 .region-card:hover{box-shadow:0 2px 8px rgba(20,82,42,0.1)}
 .tab-bar{display:flex;gap:2px;margin-bottom:22px;background:var(--card);border-radius:8px;padding:3px;width:fit-content;border:1px solid var(--border)}
 .tab-btn{padding:7px 22px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.tab-btn.active{background:var(--accent);color:#fff}
-.tab-btn:not(.active){background:transparent;color:var(--muted)}
-.tab-btn:not(.active):hover{background:#EDF5ED}
-.filter-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.filter-btn:hover{background:#EDF5ED}
-.search-input{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:11px;font-family:'JetBrains Mono',monospace;width:190px;outline:none}
-.search-input:focus{border-color:var(--accent)}
+.tab-btn.active{background:var(--accent);color:#fff}.tab-btn:not(.active){background:transparent;color:var(--muted)}.tab-btn:not(.active):hover{background:#EDF5ED}
+.filter-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}.filter-btn:hover{background:#EDF5ED}
+.search-input{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:11px;font-family:'JetBrains Mono',monospace;width:190px;outline:none}.search-input:focus{border-color:var(--accent)}
 .sev-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
 .wo-badge{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;display:inline-flex;align-items:center;gap:4px}
 .wo-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-.bar-track{height:7px;background:#E8EDE5;border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
+.bar-track{height:7px;background:#E8EDE5;border-radius:3px;overflow:hidden}.bar-fill{height:100%;border-radius:3px}
 .flex-between{display:flex;justify-content:space-between;align-items:center}
 .header-bar{background:var(--green-dark);color:#fff;margin:-22px -26px 22px;padding:18px 26px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
 .header-bar h1{font-size:24px;font-weight:800;font-family:'Space Grotesk',sans-serif;letter-spacing:-0.5px;color:#fff}
-.header-bar .sub{font-size:12px;color:#B8D4B0;margin-top:3px}
-.header-bar .date{font-size:11px;color:#B8D4B0;text-align:right;font-family:'JetBrains Mono',monospace}
-.header-bar .date strong{color:#fff;display:block;font-weight:600}
+.header-bar .sub{font-size:12px;color:#B8D4B0;margin-top:3px}.header-bar .date{font-size:11px;color:#B8D4B0;text-align:right;font-family:'JetBrains Mono',monospace}.header-bar .date strong{color:#fff;display:block;font-weight:600}
 .live-dot{width:9px;height:9px;border-radius:50%;background:var(--yellow);box-shadow:0 0 8px rgba(212,160,23,0.7);animation:pulse 2s infinite;display:inline-block}
 .accent-stripe{height:4px;background:linear-gradient(90deg,var(--green-dark),var(--green-mid),var(--yellow));margin:-22px -26px 22px}
+.accordion{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;background:var(--card)}
+.accordion-head{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;user-select:none}
+.accordion-head:hover{background:#EDF5ED}
+.accordion-arrow{transition:transform 0.2s;font-size:12px;color:var(--muted)}
+.accordion-arrow.open{transform:rotate(180deg)}
+.accordion-body{border-top:1px solid var(--border);padding:0}
+.store-row{padding:10px 16px 10px 32px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #E8EDE5;transition:background 0.15s}
+.store-row:last-child{border-bottom:none}
+.store-row:hover{background:#EDF5ED}
+.store-assets{background:var(--bg);padding:0 16px 0 32px;border-top:1px solid #E8EDE5}
 </style>
 </head>
 <body>
@@ -136,17 +135,18 @@ const DATA=[
 const FLEET={Forklift:516,"LD Vehicle":115,TMFL:226,Trailer:246,Truck:418};
 const TOTAL_FLEET=Object.values(FLEET).reduce((a,b)=>a+b,0);
 const MAXOV=Math.max(...DATA.map(r=>r.overdue));
+const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution","Millwork","Headquarters"];
 const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22",Distribution:"#5C715C",Headquarters:"#4A7C59",Millwork:"#B8860B"};
 const CC={Truck:"#1B6B2A",Trailer:"#D4A017",TMFL:"#14522A","LD Vehicle":"#6B8E23",Forklift:"#B8860B"};
 const SEV=d=>{if(d>90)return{l:"Critical",c:"#B91C1C",bg:"rgba(185,28,28,0.10)"};if(d>60)return{l:"High",c:"#C2410C",bg:"rgba(194,65,12,0.08)"};if(d>30)return{l:"Medium",c:"#B45309",bg:"rgba(180,83,9,0.08)"};return{l:"Low",c:"#1B6B2A",bg:"rgba(27,107,42,0.08)"}};
 const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
 
-let state={tab:"summary",sortCol:"overdue",sortDir:"desc",search:"",selRegion:null,selStore:null};
+let state={tab:"summary",sortCol:"overdue",sortDir:"desc",search:"",openRegions:{},openStores:{}};
 
-function groupBy(arr,key){const m={};arr.forEach(r=>{const k=r[key];if(!m[k])m[k]=[];m[k].push(r)});return m}
+function sortRegions(list){return list.sort((a,b)=>REGION_ORDER.indexOf(a.name)-REGION_ORDER.indexOf(b.name))}
 function calcGroup(items){items.sort((a,b)=>b.overdue-a.overdue);const avg=Math.round(items.reduce((s,r)=>s+r.overdue,0)/items.length);return{items,count:items.length,avg,crit:items.filter(r=>r.overdue>90).length,noWO:items.filter(r=>!r.hasOpenWO).length,worst:items[0]?.overdue||0}}
-function getRegions(){return Object.entries(groupBy(DATA,"region")).map(([n,i])=>({name:n,...calcGroup([...i])})).sort((a,b)=>b.avg-a.avg)}
-function getStores(){const m={};DATA.forEach(r=>{if(!m[r.store])m[r.store]={region:r.region,items:[]};m[r.store].items.push(r)});return Object.entries(m).map(([n,{region:rg,items:it}])=>({name:n,region:rg,...calcGroup([...it])})).sort((a,b)=>b.avg-a.avg)}
+function getRegions(){const m={};DATA.forEach(r=>{if(!m[r.region])m[r.region]=[];m[r.region].push(r)});return sortRegions(Object.entries(m).map(([n,i])=>({name:n,...calcGroup([...i])})))}
+function getStoresForRegion(rn){const m={};DATA.filter(r=>r.region===rn).forEach(r=>{if(!m[r.store])m[r.store]=[];m[r.store].push(r)});return Object.entries(m).map(([n,i])=>({name:n,...calcGroup([...i])})).sort((a,b)=>b.avg-a.avg)}
 
 function statHTML(l,v,sub,ac,ic){return`<div class="stat"><div class="icon" style="color:${ac}">${esc(ic)}</div><div class="label">${esc(l)}</div><div class="value" style="color:${ac}">${esc(String(v))}</div>${sub?`<div class="sub">${esc(sub)}</div>`:''}</div>`}
 function sevBadge(d){const s=SEV(d);return`<span class="sev-badge" style="color:${s.c};background:${s.bg};border:1px solid ${s.c}22">${s.l}</span>`}
@@ -154,19 +154,15 @@ function woBadge(r){return r.hasOpenWO?`<span class="wo-badge" style="color:#1B6
 function miniBar(items){return`<div style="display:flex;gap:1px;align-items:flex-end;height:28px">${items.map(it=>{const hh=Math.max(3,(it.overdue/MAXOV)*26);const s=SEV(it.overdue);return`<div title="${it.asset}: ${it.overdue}d" style="width:5px;height:${hh}px;background:${s.c};border-radius:1.5px;opacity:0.75"></div>`}).join('')}</div>`}
 function dot(color,sz=7){return`<span style="width:${sz}px;height:${sz}px;border-radius:2px;background:${color};display:inline-block"></span>`}
 
-function filterData(){let d=DATA;if(state.selRegion)d=d.filter(r=>r.region===state.selRegion);if(state.selStore)d=d.filter(r=>r.store===state.selStore);if(state.search)d=d.filter(r=>r.asset.includes(state.search)||r.store.toLowerCase().includes(state.search.toLowerCase()));return[...d].sort((a,b)=>{const av=a[state.sortCol],bv=b[state.sortCol];if(typeof av==="string")return state.sortDir==="desc"?bv.localeCompare(av):av.localeCompare(bv);return state.sortDir==="desc"?bv-av:av-bv})}
+function filterData(){let d=DATA;if(state.search)d=d.filter(r=>r.asset.includes(state.search)||r.store.toLowerCase().includes(state.search.toLowerCase()));return[...d].sort((a,b)=>{const av=a[state.sortCol],bv=b[state.sortCol];if(typeof av==="string")return state.sortDir==="desc"?bv.localeCompare(av):av.localeCompare(bv);return state.sortDir==="desc"?bv-av:av-bv})}
 
 function thH(l,col,w,sortable=true){const ac=state.sortCol===col;const ar=ac?(state.sortDir==="desc"?" ↓":" ↑"):"";return`<th class="${sortable?'sortable':''} ${ac?'active':''}" style="width:${w}px" ${sortable?`onclick="handleSort('${col}')"`:''}>${esc(l)}${ar}</th>`}
 
-function tableHTML(data,showStore=true,showRegion=true){
-  let hd=thH("Asset","asset",80)+thH("Class","cls",90)+thH("Type","type",140);
-  if(showRegion)hd+=thH("Region","region",100);if(showStore)hd+=thH("Store","store",160);
-  hd+=thH("Last WO","lastWO",80)+thH("Last PM","lastDate",90)+thH("Days Since","daysSince",80)+`<th style="width:60px">INTERVAL</th>`+thH("Overdue","overdue",90)+`<th style="width:80px">SEVERITY</th><th style="width:100px">OPEN WO</th><th style="width:100px">OVERDUE SPAN</th>`;
-  const rows=data.map((r,i)=>{const s=SEV(r.overdue);const bw=Math.max(3,(r.overdue/MAXOV)*100);let rw=`<td class="mono" style="font-weight:600;font-size:12px">${esc(r.asset)}</td><td><span style="display:inline-flex;align-items:center;gap:5px">${dot(CC[r.cls]||'#666')} ${esc(r.cls)}</span></td><td style="color:var(--muted)">${esc(r.type)}</td>`;
-  if(showRegion)rw+=`<td><span style="display:inline-flex;align-items:center;gap:5px">${dot(RC[r.region]||'#666')} ${esc(r.region)}</span></td>`;if(showStore)rw+=`<td>${esc(r.store)}</td>`;
-  rw+=`<td class="mono" style="color:var(--muted)">${r.lastWO}</td><td class="mono">${esc(r.lastDate)}</td><td class="mono" style="font-size:12px">${r.daysSince}</td><td class="mono" style="color:var(--muted)">${r.interval}d</td><td class="mono" style="font-weight:700;color:${s.c};font-size:12px">${r.overdue}</td><td>${sevBadge(r.overdue)}</td><td>${woBadge(r)}</td><td style="width:100px"><div class="bar-track"><div class="bar-fill" style="width:${bw}%;background:${s.c}"></div></div></td>`;
-  return`<tr style="background:${i%2===0?'transparent':'#F9FAF7'}">${rw}</tr>`}).join('');
-  return`<div style="overflow-x:auto"><table><thead><tr>${hd}</tr></thead><tbody>${rows}</tbody></table><div class="flex-between" style="margin-top:12px;padding:8px 0;border-top:1px solid var(--border);font-size:11px;color:var(--muted)"><span>Showing ${data.length} of ${DATA.length} assets</span><span class="mono">Critical: &gt;90d · High: 61-90d · Medium: 31-60d · Low: 1-30d</span></div></div>`}
+function assetTableHTML(data){
+  let hd=thH("Asset","asset",80)+thH("Class","cls",80)+thH("Type","type",130)+thH("Store","store",150)+thH("Last WO","lastWO",75)+thH("Last PM","lastDate",85)+thH("Days Since","daysSince",75)+`<th style="width:55px">INTV</th>`+thH("Overdue","overdue",75)+`<th style="width:75px">SEV</th><th style="width:90px">OPEN WO</th><th style="width:90px">SPAN</th>`;
+  const rows=data.map((r,i)=>{const s=SEV(r.overdue);const bw=Math.max(3,(r.overdue/MAXOV)*100);
+  return`<tr style="background:${i%2===0?'transparent':'#F9FAF7'}"><td class="mono" style="font-weight:600;font-size:12px">${esc(r.asset)}</td><td><span style="display:inline-flex;align-items:center;gap:4px">${dot(CC[r.cls]||'#666',6)} ${esc(r.cls)}</span></td><td style="color:var(--muted)">${esc(r.type)}</td><td>${esc(r.store)}</td><td class="mono" style="color:var(--muted)">${r.lastWO}</td><td class="mono">${esc(r.lastDate)}</td><td class="mono">${r.daysSince}</td><td class="mono" style="color:var(--muted)">${r.interval}d</td><td class="mono" style="font-weight:700;color:${s.c}">${r.overdue}</td><td>${sevBadge(r.overdue)}</td><td>${woBadge(r)}</td><td><div class="bar-track"><div class="bar-fill" style="width:${bw}%;background:${s.c}"></div></div></td></tr>`}).join('');
+  return`<div style="overflow-x:auto"><table><thead><tr>${hd}</tr></thead><tbody>${rows}</tbody></table></div>`}
 
 function renderSummary(){
   const crit=DATA.filter(r=>r.overdue>90).length;const noWO=DATA.filter(r=>!r.hasOpenWO).length;const avg=Math.round(DATA.reduce((s,r)=>s+r.overdue,0)/DATA.length);
@@ -177,42 +173,51 @@ function renderSummary(){
   let sl=sc.map(s=>`<span style="font-size:10px;color:var(--muted);display:inline-flex;align-items:center;gap:4px">${dot(s.c,8)} ${s.l}: ${sevB[s.l]}</span>`).join('');
   o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Severity Distribution</div><div style="display:flex;border-radius:6px;overflow:hidden;height:28px">${sb}</div><div style="display:flex;gap:16px;margin-top:8px">${sl}</div></div>`;
   const cls=["Truck","Trailer","TMFL","LD Vehicle","Forklift"];
-  let cc=cls.map(c=>{const it=DATA.filter(r=>r.cls===c).sort((a,b)=>b.overdue-a.overdue);if(!it.length)return'';const fl=FLEET[c]||0;const pc=fl?((it.length/fl)*100).toFixed(1):it.length;const ca=Math.round(it.reduce((s,r)=>s+r.overdue,0)/it.length);const cr=it.filter(r=>r.overdue>90).length;return`<div style="background:var(--bg);border-radius:8px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid ${CC[c]}"><div class="flex-between" style="margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:${CC[c]}">${esc(c)}</span><span class="mono" style="font-size:18px;font-weight:800;color:var(--fg)">${fl?pc+'%':pc}</span></div><div class="mono" style="font-size:10px;color:var(--muted);margin-bottom:6px">${it.length} overdue${fl?' of '+fl:''}</div>${miniBar(it)}<div class="flex-between" style="margin-top:6px;font-size:10px;color:var(--muted)"><span>Avg: ${ca}d</span>${cr>0?`<span style="color:#B91C1C;font-weight:600">${cr} critical</span>`:''}</div></div>`}).join('');
+  let cc=cls.map(c=>{const it=DATA.filter(r=>r.cls===c).sort((a,b)=>b.overdue-a.overdue);if(!it.length)return'';const fl=FLEET[c]||0;const pc=fl?((it.length/fl)*100).toFixed(1):it.length;const ca=Math.round(it.reduce((s,r)=>s+r.overdue,0)/it.length);const cr=it.filter(r=>r.overdue>90).length;return`<div style="background:var(--bg);border-radius:8px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid ${CC[c]}"><div class="flex-between" style="margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:${CC[c]}">${esc(c)}</span><span class="mono" style="font-size:18px;font-weight:800">${fl?pc+'%':pc}</span></div><div class="mono" style="font-size:10px;color:var(--muted);margin-bottom:6px">${it.length} overdue${fl?' of '+fl:''}</div>${miniBar(it)}<div class="flex-between" style="margin-top:6px;font-size:10px;color:var(--muted)"><span>Avg: ${ca}d</span>${cr>0?`<span style="color:#B91C1C;font-weight:600">${cr} critical</span>`:''}</div></div>`}).join('');
   o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Overdue by Asset Class</div><div class="grid grid-sm">${cc}</div></div>`;
-  let rc=regions.map(r=>`<div class="region-card" style="border-color:var(--border);border-left-color:${RC[r.name]||'#666'}" onclick="state.tab='region';state.selRegion='${r.name}';render()"><div class="flex-between" style="margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:${RC[r.name]||'#333'}">${esc(r.name)}</span><span class="mono" style="font-size:18px;font-weight:800;color:var(--fg)">${r.count}</span></div>${miniBar(r.items)}<div class="flex-between" style="margin-top:6px;font-size:10px;color:var(--muted)"><span>Avg: ${r.avg}d</span>${r.noWO>0?`<span style="color:#D4A017;font-weight:600">${r.noWO} no WO</span>`:''}${r.crit>0?`<span style="color:#B91C1C;font-weight:600">${r.crit} crit</span>`:''}</div></div>`).join('');
+  let rc=regions.map(r=>`<div class="region-card" style="border-color:var(--border);border-left-color:${RC[r.name]||'#666'}" onclick="state.tab='regions';state.openRegions={'${r.name}':true};render()"><div class="flex-between" style="margin-bottom:3px"><span style="font-size:12px;font-weight:700;color:${RC[r.name]||'#333'}">${esc(r.name)}</span><span class="mono" style="font-size:18px;font-weight:800">${r.count}</span></div>${miniBar(r.items)}<div class="flex-between" style="margin-top:6px;font-size:10px;color:var(--muted)"><span>Avg: ${r.avg}d</span>${r.noWO>0?`<span style="color:#D4A017;font-weight:600">${r.noWO} no WO</span>`:''}${r.crit>0?`<span style="color:#B91C1C;font-weight:600">${r.crit} crit</span>`:''}</div></div>`).join('');
   o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Overdue by Region</div><div class="grid">${rc}</div></div>`;
-  o+=`<div class="card"><div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:12px;font-weight:700">All Overdue Assets</span><input class="search-input" type="text" placeholder="Search asset # or store..." value="${esc(state.search)}" oninput="state.search=this.value;render()"></div>${tableHTML(filterData())}</div>`;
+  o+=`<div class="card"><div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:12px;font-weight:700">All Overdue Assets</span><input class="search-input" type="text" placeholder="Search asset # or store..." value="${esc(state.search)}" oninput="state.search=this.value;render()"></div>${assetTableHTML(filterData())}<div class="flex-between" style="margin-top:12px;padding:8px 0;border-top:1px solid var(--border);font-size:11px;color:var(--muted)"><span>Showing ${filterData().length} of ${DATA.length} assets</span><span class="mono">Critical: &gt;90d · High: 61-90d · Medium: 31-60d · Low: 1-30d</span></div></div>`;
   return o;
 }
 
-function renderRegion(){
-  const regions=getRegions();let o=`<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap"><button class="filter-btn" style="${!state.selRegion?'border-color:var(--accent);background:rgba(27,107,42,0.08);color:var(--accent)':''}" onclick="state.selRegion=null;render()">All Regions</button>`;
-  regions.forEach(r=>{const s=state.selRegion===r.name;o+=`<button class="filter-btn" style="${s?`border-color:${RC[r.name]};background:${RC[r.name]}15;color:${RC[r.name]}`:''}" onclick="state.selRegion=${s?'null':`'${r.name}'`};render()">${esc(r.name)} (${r.count})</button>`});o+=`</div>`;
-  if(state.selRegion){const r=regions.find(x=>x.name===state.selRegion);if(r)o+=`<div class="kpi-strip">${statHTML("Overdue Assets",r.count,r.name,RC[r.name]||"#1B6B2A","#")}${statHTML("Critical",r.crit,`${r.crit>0?Math.round(r.crit/r.count*100):0}% of region`,"#B91C1C","!")}${statHTML("No Open WO",r.noWO,"Needs WO created","#D4A017","⚠")}${statHTML("Avg Overdue",r.avg,`Worst: ${r.worst}d`,"#C2410C","μ")}</div>`}
-  else{const nw=DATA.filter(r=>!r.hasOpenWO).length;const av=Math.round(DATA.reduce((s,r)=>s+r.overdue,0)/DATA.length);o+=`<div class="kpi-strip">${statHTML("Total Overdue",DATA.length,"All regions","#1B6B2A","Σ")}${statHTML("Regions",regions.length,"With overdue assets","#14522A","◆")}${statHTML("No Open WO",nw,"Needs WO created","#D4A017","⚠")}${statHTML("Avg Overdue",av,`Worst: ${MAXOV}d`,"#C2410C","μ")}</div>`;
-  let rr=regions.map((r,i)=>`<tr style="cursor:pointer;background:${i%2===0?'transparent':'#F9FAF7'}" onclick="state.selRegion='${r.name}';render()"><td style="padding:9px 10px"><span style="display:inline-flex;align-items:center;gap:6px">${dot(RC[r.name]||'#666',8)} <span style="font-weight:600">${esc(r.name)}</span></span></td><td class="mono" style="padding:9px 10px;font-weight:700">${r.count}</td><td class="mono" style="padding:9px 10px;color:${r.crit>0?'#B91C1C':'var(--muted)'};font-weight:${r.crit>0?700:400}">${r.crit}</td><td class="mono" style="padding:9px 10px;color:${r.noWO>0?'#D4A017':'var(--muted)'};font-weight:${r.noWO>0?700:400}">${r.noWO}</td><td class="mono" style="padding:9px 10px;color:${SEV(r.avg).c};font-weight:600">${r.avg}d</td><td class="mono" style="padding:9px 10px;color:${SEV(r.worst).c};font-weight:600">${r.worst}d</td><td style="padding:9px 10px">${miniBar(r.items)}</td></tr>`).join('');
-  o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Region Comparison</div><table><thead><tr><th style="width:140px">REGION</th><th style="width:80px">OVERDUE</th><th style="width:80px">CRITICAL</th><th style="width:80px">NO WO</th><th style="width:80px">AVG DAYS</th><th style="width:80px">WORST</th><th style="width:120px">DISTRIBUTION</th></tr></thead><tbody>${rr}</tbody></table></div>`}
-  o+=`<div class="card"><div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:12px;font-weight:700">${state.selRegion?esc(state.selRegion)+' Assets':'All Assets by Region'}</span><input class="search-input" type="text" placeholder="Search..." value="${esc(state.search)}" oninput="state.search=this.value;render()" style="width:160px"></div>${tableHTML(filterData(),true,!state.selRegion)}</div>`;return o;
-}
+function toggleRegion(name){state.openRegions[name]=!state.openRegions[name];render()}
+function toggleStore(rn,sn){const key=rn+'|'+sn;state.openStores[key]=!state.openStores[key];render()}
 
-function renderStore(){
-  const regions=getRegions();const stores=getStores();let o=`<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center"><button class="filter-btn" style="${!state.selStore&&!state.selRegion?'border-color:var(--accent);background:rgba(27,107,42,0.08);color:var(--accent)':''}" onclick="state.selStore=null;state.selRegion=null;render()">All Stores</button>`;
-  regions.forEach(r=>{const s=state.selRegion===r.name;o+=`<button class="filter-btn" style="${s?`border-color:${RC[r.name]};background:${RC[r.name]}15;color:${RC[r.name]}`:''}" onclick="state.selRegion=${s?'null':`'${r.name}'`};state.selStore=null;render()">${esc(r.name)}</button>`});o+=`</div>`;
-  if(!state.selStore){const fl=stores.filter(s=>!state.selRegion||s.region===state.selRegion);let sr=fl.map((s,i)=>`<tr style="cursor:pointer;background:${i%2===0?'transparent':'#F9FAF7'}" onclick="state.selStore='${s.name.replace(/'/g,"\\'")}';render()"><td style="padding:9px 10px;font-weight:600;font-size:12px">${esc(s.name)}</td><td style="padding:9px 10px;font-size:11px"><span style="display:inline-flex;align-items:center;gap:4px">${dot(RC[s.region]||'#666',6)}${esc(s.region)}</span></td><td class="mono" style="padding:9px 10px;font-weight:700">${s.count}</td><td class="mono" style="padding:9px 10px;color:${s.crit>0?'#B91C1C':'var(--muted)'};font-weight:${s.crit>0?700:400}">${s.crit}</td><td class="mono" style="padding:9px 10px;color:${s.noWO>0?'#D4A017':'var(--muted)'};font-weight:${s.noWO>0?700:400}">${s.noWO}</td><td class="mono" style="padding:9px 10px;color:${SEV(s.avg).c};font-weight:600">${s.avg}d</td><td class="mono" style="padding:9px 10px;color:${SEV(s.worst).c};font-weight:600">${s.worst}d</td></tr>`).join('');
-  o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Store Overview ${state.selRegion?'— '+esc(state.selRegion):''}</div><table><thead><tr><th style="width:180px">STORE</th><th style="width:100px">REGION</th><th style="width:70px">OVERDUE</th><th style="width:70px">CRITICAL</th><th style="width:70px">NO WO</th><th style="width:80px">AVG DAYS</th><th style="width:80px">WORST</th></tr></thead><tbody>${sr}</tbody></table></div>`}
-  else{const s=stores.find(x=>x.name===state.selStore);if(s)o+=`<div class="kpi-strip">${statHTML("Store",s.count,`${s.name} · ${s.region}`,RC[s.region]||"#1B6B2A","#")}${statHTML("Critical",s.crit,s.crit>0?"Immediate action":"None","#B91C1C","!")}${statHTML("No Open WO",s.noWO,s.noWO>0?"Needs WO created":"All covered","#D4A017","⚠")}${statHTML("Avg Overdue",s.avg,`Worst: ${s.worst}d`,"#C2410C","μ")}</div>`}
-  o+=`<div class="card"><div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:12px;font-weight:700">${state.selStore?esc(state.selStore):state.selRegion?esc(state.selRegion)+' — Store Details':'All Store Assets'}</span><div style="display:flex;gap:8px;align-items:center">${state.selStore?`<button class="filter-btn" onclick="state.selStore=null;render()">← Back</button>`:''}<input class="search-input" type="text" placeholder="Search..." value="${esc(state.search)}" oninput="state.search=this.value;render()" style="width:160px"></div></div>${tableHTML(filterData(),!state.selStore,!state.selStore)}</div>`;return o;
+function renderRegions(){
+  const regions=getRegions();
+  const nw=DATA.filter(r=>!r.hasOpenWO).length;const avg=Math.round(DATA.reduce((s,r)=>s+r.overdue,0)/DATA.length);
+  let o=`<div class="kpi-strip">${statHTML("Total Overdue",DATA.length,`${(DATA.length/TOTAL_FLEET*100).toFixed(1)}% of fleet`,"#1B6B2A","Σ")}${statHTML("Regions",regions.length,"With overdue assets","#14522A","◆")}${statHTML("No Open WO",nw,"Needs WO created","#D4A017","⚠")}${statHTML("Avg Overdue",avg,`Worst: ${MAXOV}d`,"#C2410C","μ")}</div>`;
+
+  regions.forEach(r=>{
+    const isOpen=!!state.openRegions[r.name];
+    const stores=getStoresForRegion(r.name);
+    let storeContent='';
+    if(isOpen){
+      stores.forEach(s=>{
+        const sk=r.name+'|'+s.name;
+        const sOpen=!!state.openStores[sk];
+        const statsRow=`<span class="mono" style="font-size:11px;display:flex;gap:12px;align-items:center"><span style="font-weight:700">${s.count} asset${s.count>1?'s':''}</span><span style="color:var(--muted)">Avg: ${s.avg}d</span>${s.crit>0?`<span style="color:#B91C1C;font-weight:600">${s.crit} crit</span>`:''}${s.noWO>0?`<span style="color:#D4A017;font-weight:600">${s.noWO} no WO</span>`:''}</span>`;
+        storeContent+=`<div class="store-row" onclick="event.stopPropagation();toggleStore('${r.name}','${s.name.replace(/'/g,"\\'")}')"><div style="display:flex;align-items:center;gap:8px"><span class="accordion-arrow ${sOpen?'open':''}">▾</span><span style="font-weight:600;font-size:12px">${esc(s.name)}</span></div>${statsRow}</div>`;
+        if(sOpen){
+          storeContent+=`<div class="store-assets">${assetTableHTML(s.items)}</div>`;
+        }
+      });
+    }
+    const regionStats=`<span class="mono" style="font-size:11px;display:flex;gap:14px;align-items:center"><span style="font-weight:800;font-size:16px">${r.count}</span><span style="color:var(--muted)">Avg: ${r.avg}d</span>${r.crit>0?`<span style="color:#B91C1C;font-weight:600">${r.crit} crit</span>`:''}${r.noWO>0?`<span style="color:#D4A017;font-weight:600">${r.noWO} no WO</span>`:''}<span style="color:var(--muted)">${stores.length} store${stores.length>1?'s':''}</span></span>`;
+    o+=`<div class="accordion"><div class="accordion-head" onclick="toggleRegion('${r.name}')"><div style="display:flex;align-items:center;gap:10px"><span class="accordion-arrow ${isOpen?'open':''}">▾</span>${dot(RC[r.name]||'#666',10)}<span class="grotesk" style="font-size:14px;font-weight:700;color:${RC[r.name]||'var(--fg)'}">${esc(r.name)}</span></div>${regionStats}</div>${isOpen?`<div class="accordion-body">${storeContent}</div>`:''}</div>`;
+  });
+  return o;
 }
 
 function handleSort(col){if(state.sortCol===col)state.sortDir=state.sortDir==="desc"?"asc":"desc";else{state.sortCol=col;state.sortDir="desc"}render()}
-function switchTab(tab){state.tab=tab;state.selRegion=null;state.selStore=null;state.search="";state.sortCol="overdue";state.sortDir="desc";render()}
+function switchTab(tab){state.tab=tab;state.search="";state.sortCol="overdue";state.sortDir="desc";if(tab!=="regions"){state.openRegions={};state.openStores={}}render()}
 
 function render(){
   const now=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  const tabs=["summary","region","store"];
-  let tb=tabs.map(t=>`<button class="tab-btn ${state.tab===t?'active':''}" onclick="switchTab('${t}')">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('');
-  let content='';
-  if(state.tab==="summary")content=renderSummary();else if(state.tab==="region")content=renderRegion();else content=renderStore();
+  const tabs=[{id:"summary",l:"Summary"},{id:"regions",l:"Region / Store"}];
+  let tb=tabs.map(t=>`<button class="tab-btn ${state.tab===t.id?'active':''}" onclick="switchTab('${t.id}')">${t.l}</button>`).join('');
+  let content=state.tab==="summary"?renderSummary():renderRegions();
   document.getElementById('app').innerHTML=`
     <div class="header-bar">
       <div>
