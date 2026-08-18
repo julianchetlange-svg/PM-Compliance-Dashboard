@@ -56,6 +56,8 @@ input::placeholder{color:#8A9E8A}
 .store-select{padding:8px 14px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;font-weight:600;width:320px;outline:none}.store-select:focus{border-color:var(--accent)}
 .empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
 .empty-state .big{font-size:36px;margin-bottom:8px}
+.trend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:640px){.trend-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -262,7 +264,7 @@ function renderEmails(){
 }
 function trendChart(data,key,label,color,fmt){
   fmt=fmt||(v=>String(v));
-  const w=680,h=170,padL=30,padR=20,padT=28,padB=28;
+  const w=440,h=210,padL=28,padR=14,padT=26,padB=24;
   const vals=data.map(t=>t[key]);
   const maxV=Math.max(...vals,1);
   const n=data.length;
@@ -283,21 +285,21 @@ function trendChart(data,key,label,color,fmt){
   const trendStart={x:points[0].x,y:scaleY(intercept)};
   const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
   const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
-  const showLabel=(i)=>n<=8||i===0||i===n-1||i%2===0;
-  const circles=points.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="${color}"/>${showLabel(i)?`<text x="${p.x}" y="${p.y-10}" font-size="11" font-weight="700" fill="${color}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`).join('');
-  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-8}" font-size="9" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const showLabel=(i)=>n<=5||i===0||i===n-1||i%3===0;
+  const circles=points.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="${color}"/>${showLabel(i)?`<text x="${p.x}" y="${p.y-9}" font-size="10" font-weight="700" fill="${color}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`).join('');
+  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-7}" font-size="8.5" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
   const first=vals[0],last=vals[vals.length-1];const delta=last-first;
   const up=delta>0,flat=delta===0;
   const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
   const arrow=flat?'→':up?'▲':'▼';
   const trendDir=slope>0.01?'rising':slope<-0.01?'falling':'flat';
   const trendColor=trendDir==='rising'?'#B91C1C':trendDir==='falling'?'#1B6B2A':'#8A9E8A';
-  return `<div class="card"><div class="flex-between" style="margin-bottom:10px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:11px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)} over period</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px;display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:16px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:10px;color:var(--muted)">Linear trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(1)}/report)</span></div></div>`;
+  return `<div class="card" style="margin-bottom:0"><div class="flex-between" style="margin-bottom:8px;flex-wrap:wrap;gap:4px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:10.5px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:14px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:9.5px;color:var(--muted)">Trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(1)}/report)</span></div></div>`;
 }
 function setTrendRange(r){state.trendRange=r;render()}
 function goalChart(data,key,label,color,goal,fmt,footnote){
   fmt=fmt||(v=>String(v));
-  const w=680,h=180,padL=34,padR=20,padT=28,padB=28;
+  const w=440,h=225,padL=30,padR=40,padT=26,padB=24;
   const vals=data.map(t=>t[key]);
   const maxV=Math.max(...vals,goal)*1.18;
   const n=data.length;
@@ -318,9 +320,9 @@ function goalChart(data,key,label,color,goal,fmt,footnote){
   const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
   const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
   const goalY=scaleY(goal);
-  const showLabel=(i)=>n<=8||i===0||i===n-1||i%2===0;
-  const circles=points.map((p,i)=>{const over=p.v>goal;const pc=over?'#B91C1C':color;return `<circle cx="${p.x}" cy="${p.y}" r="${over?5:4}" fill="${pc}"${over?' stroke="#fff" stroke-width="1"':''}/>${showLabel(i)?`<text x="${p.x}" y="${p.y-10}" font-size="11" font-weight="700" fill="${pc}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
-  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-8}" font-size="9" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const showLabel=(i)=>n<=5||i===0||i===n-1||i%3===0;
+  const circles=points.map((p,i)=>{const over=p.v>goal;const pc=over?'#B91C1C':color;return `<circle cx="${p.x}" cy="${p.y}" r="${over?4.5:3.5}" fill="${pc}"${over?' stroke="#fff" stroke-width="1"':''}/>${showLabel(i)?`<text x="${p.x}" y="${p.y-9}" font-size="10" font-weight="700" fill="${pc}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
+  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-7}" font-size="8.5" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
   const first=vals[0],last=vals[vals.length-1];const delta=last-first;
   const up=delta>0,flat=Math.abs(delta)<0.005;
   const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
@@ -338,8 +340,8 @@ function goalChart(data,key,label,color,goal,fmt,footnote){
   } else {
     statusBadge=`<span style="color:#B91C1C;font-weight:700">⚠ Currently above goal</span>`;
   }
-  const trendNote=`<span style="color:${trendBelowGoal?'#1B6B2A':'#B91C1C'};font-weight:700">${trendBelowGoal?'✓':'⚠'} ${n===12?'90-day':n+'-report'} trend line is ${trendBelowGoal?'below':'above'} goal</span> <span style="color:var(--muted);font-weight:500">(trajectory: ${fmt(trendEndVal)} vs. ${fmt(goal)} goal)</span>`;
-  return `<div class="card"><div class="flex-between" style="margin-bottom:10px;flex-wrap:wrap;gap:6px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:11px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)} over period</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px;display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${w-padR}" y2="${goalY.toFixed(1)}" stroke="#D4A017" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${w-padR}" y="${(goalY-6).toFixed(1)}" font-size="10" font-weight="700" fill="#D4A017" text-anchor="end" font-family="'JetBrains Mono',monospace">Goal: ${esc(fmt(goal))}</text><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div class="mono" style="font-size:11px;margin-top:6px">${trendNote}</div><div class="flex-between" style="margin-top:6px;flex-wrap:wrap;gap:8px"><div style="display:flex;align-items:center;gap:6px"><span style="width:16px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:10px;color:var(--muted)">Linear trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(2)}%/report)</span></div><span class="mono" style="font-size:10px">${statusBadge}</span></div>${footnote?`<div class="mono" style="font-size:9.5px;color:#8A9E8A;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${esc(footnote)}</div>`:''}</div>`;
+  const trendNote=`<span style="color:${trendBelowGoal?'#1B6B2A':'#B91C1C'};font-weight:700">${trendBelowGoal?'✓':'⚠'} Trend is ${trendBelowGoal?'below':'above'} goal</span> <span style="color:var(--muted);font-weight:500">(${fmt(trendEndVal)} vs. ${fmt(goal)})</span>`;
+  return `<div class="card" style="margin-bottom:0"><div class="flex-between" style="margin-bottom:8px;flex-wrap:wrap;gap:4px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:10.5px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${w-padR}" y2="${goalY.toFixed(1)}" stroke="#D4A017" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${w-4}" y="${(goalY-12).toFixed(1)}" font-size="9" font-weight="700" fill="#D4A017" text-anchor="end" font-family="'JetBrains Mono',monospace">Goal: ${esc(fmt(goal))}</text><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div class="mono" style="font-size:9.5px;margin-top:5px">${trendNote}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:14px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:9.5px;color:var(--muted)">Trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(2)}%/report)</span></div><div class="mono" style="font-size:9.5px;margin-top:4px">${statusBadge}</div>${footnote?`<div class="mono" style="font-size:8.5px;color:#8A9E8A;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">${esc(footnote)}</div>`:''}</div>`;
 }
 function renderTrends(){
   const data=state.trendRange==="4w"?TREND.slice(-4):TREND;
@@ -347,12 +349,15 @@ function renderTrends(){
   let o=`<div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:13px;font-weight:700">${data.length}-Point Trend · ${esc(first.date)} → ${esc(last.date)}</span><div class="tab-bar" style="margin-bottom:0"><button class="tab-btn ${state.trendRange==='4w'?'active':''}" onclick="setTrendRange('4w')">Last 4 Reports</button><button class="tab-btn ${state.trendRange==='90d'?'active':''}" onclick="setTrendRange('90d')">Full History (90d)</button></div></div>`;
   o+=`<div class="kpi-strip">${statHTML("Total Overdue",last.total,`${first.date} → ${last.date}`,"#1B6B2A","Σ",last.total-first.total)}${statHTML("Critical (>90d)",last.crit,`${first.date} → ${last.date}`,"#B91C1C","!",last.crit-first.crit)}${statHTML("No Open WO",last.noWO,`${first.date} → ${last.date}`,"#D4A017","⚠",last.noWO-first.noWO)}${statHTML("Avg Days Overdue",last.avg,`${first.date} → ${last.date}`,"#C2410C","μ",last.avg-first.avg)}</div>`;
   const pctData=data.map(t=>({...t,pct:+(t.total/t.fleet*100).toFixed(2)}));
-  o+=goalChart(pctData,'pct','% of Fleet Overdue (Goal: ≤5% — Industry-Leading Fleet Performance)','#14522A',5,v=>v.toFixed(2)+'%','Goal reflects industry-cited "leading fleet" PM performance tier (~95-100% on-time PM compliance), not a formal regulatory or engineering standard. Source figures are vendor/industry benchmark reports (2026); treat as directional, not authoritative.');
-  o+=trendChart(data,'total','Total Overdue Assets','#1B6B2A');
-  o+=trendChart(data,'crit','Critical Assets (&gt;90d Overdue)','#B91C1C');
-  o+=trendChart(data,'noWO','Assets Without an Open Work Order','#D4A017');
-  o+=trendChart(data,'avg','Average Days Overdue','#C2410C',v=>v+'d');
-  o+=trendChart(data,'worst','Worst-Case Days Overdue','#6B8E23',v=>v+'d');
+  const allCharts=[
+    goalChart(pctData,'pct','% of Fleet Overdue (Goal: ≤5% — Industry-Leading Fleet Performance)','#14522A',5,v=>v.toFixed(2)+'%','Goal reflects industry-cited "leading fleet" PM performance tier (~95-100% on-time PM compliance), not a formal regulatory or engineering standard. Source figures are vendor/industry benchmark reports (2026); treat as directional, not authoritative.'),
+    trendChart(data,'total','Total Overdue Assets','#1B6B2A'),
+    trendChart(data,'crit','Critical Assets (&gt;90d Overdue)','#B91C1C'),
+    trendChart(data,'noWO','Assets Without an Open Work Order','#D4A017'),
+    trendChart(data,'avg','Average Days Overdue','#C2410C',v=>v+'d'),
+    trendChart(data,'worst','Worst-Case Days Overdue','#6B8E23',v=>v+'d')
+  ];
+  o+=`<div class="trend-grid">${allCharts.join('')}</div>`;
   const rows=data.map(t=>`<tr><td class="mono" style="font-weight:700">${esc(t.date)}</td><td class="mono">${t.total}</td><td class="mono" style="color:#B91C1C">${t.crit}</td><td class="mono" style="color:#D4A017">${t.noWO}</td><td class="mono">${t.avg}d</td><td class="mono">${t.worst}d</td></tr>`).join('');
   o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Snapshot Data</div><div style="overflow-x:auto"><table><thead><tr><th>Report Date</th><th>Total Overdue</th><th>Critical</th><th>No Open WO</th><th>Avg Overdue</th><th>Worst Overdue</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
   return o;
