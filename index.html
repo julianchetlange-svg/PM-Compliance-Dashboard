@@ -120,11 +120,25 @@ const TOTAL_FLEET=Object.values(FLEET).reduce((a,b)=>a+b,0);
 const MAXOV=Math.max(...DATA.map(r=>r.overdue));
 const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution","Millwork","Headquarters"];
 const PRIOR={total:61,crit:1,noWO:1,avg:18,worst:139};
+const TREND=[
+{date:"05/19/2026",total:73,crit:6,noWO:16,avg:32,worst:175,fleet:1525},
+{date:"05/25/2026",total:67,crit:6,noWO:15,avg:32,worst:206,fleet:1525},
+{date:"06/01/2026",total:70,crit:5,noWO:12,avg:29,worst:213,fleet:1525},
+{date:"06/08/2026",total:65,crit:6,noWO:14,avg:32,worst:220,fleet:1525},
+{date:"06/15/2026",total:73,crit:6,noWO:14,avg:30,worst:227,fleet:1525},
+{date:"06/29/2026",total:57,crit:5,noWO:9,avg:28,worst:242,fleet:1525},
+{date:"07/09/2026",total:60,crit:5,noWO:12,avg:30,worst:152,fleet:1447},
+{date:"07/21/2026",total:73,crit:5,noWO:8,avg:30,worst:164,fleet:1447},
+{date:"07/30/2026",total:77,crit:3,noWO:6,avg:24,worst:174,fleet:1447},
+{date:"08/05/2026",total:70,crit:1,noWO:7,avg:22,worst:132,fleet:1447},
+{date:"08/12/2026",total:61,crit:1,noWO:1,avg:18,worst:139,fleet:1447},
+{date:"08/18/2026",total:52,crit:0,noWO:9,avg:15,worst:71,fleet:1453}
+];
 const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22",Distribution:"#5C715C",Headquarters:"#4A7C59",Millwork:"#B8860B"};
 const CC={Truck:"#1B6B2A",Trailer:"#D4A017",TMFL:"#14522A","LD Vehicle":"#6B8E23",Forklift:"#B8860B"};
 const SEV=d=>{if(d>90)return{l:"Critical",c:"#B91C1C",bg:"rgba(185,28,28,0.10)"};if(d>60)return{l:"High",c:"#C2410C",bg:"rgba(194,65,12,0.08)"};if(d>30)return{l:"Medium",c:"#B45309",bg:"rgba(180,83,9,0.08)"};return{l:"Low",c:"#1B6B2A",bg:"rgba(27,107,42,0.08)"}};
 const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
-let state={tab:"summary",sortCol:"overdue",sortDir:"desc",search:"",openRegions:{},openStores:{},emailRegion:(REGION_ORDER.find(r=>DATA.some(d=>d.region===r))||""),copyMsg:""};
+let state={tab:"summary",sortCol:"overdue",sortDir:"desc",search:"",openRegions:{},openStores:{},emailRegion:(REGION_ORDER.find(r=>DATA.some(d=>d.region===r))||""),copyMsg:"",trendRange:"90d"};
 function sortRegions(list){return list.sort((a,b)=>REGION_ORDER.indexOf(a.name)-REGION_ORDER.indexOf(b.name))}
 function calcGroup(items){items.sort((a,b)=>b.overdue-a.overdue);const avg=Math.round(items.reduce((s,r)=>s+r.overdue,0)/items.length);return{items,count:items.length,avg,crit:items.filter(r=>r.overdue>90).length,noWO:items.filter(r=>!r.hasOpenWO).length,worst:items[0]?.overdue||0}}
 function getRegions(){const m={};DATA.forEach(r=>{if(!m[r.region])m[r.region]=[];m[r.region].push(r)});return sortRegions(Object.entries(m).map(([n,i])=>({name:n,...calcGroup([...i])})))}
@@ -246,9 +260,106 @@ function renderEmails(){
   </div>`;
   return o;
 }
+function trendChart(data,key,label,color,fmt){
+  fmt=fmt||(v=>String(v));
+  const w=680,h=170,padL=30,padR=20,padT=28,padB=28;
+  const vals=data.map(t=>t[key]);
+  const maxV=Math.max(...vals,1);
+  const n=data.length;
+  const stepX=n>1?(w-padL-padR)/(n-1):0;
+  const scaleY=v=>h-padB-(v/maxV)*(h-padT-padB);
+  const points=data.map((t,i)=>({x:padL+i*stepX,y:scaleY(t[key]),v:t[key],date:t.date}));
+  const pathD=points.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const areaD=`${pathD} L${points[points.length-1].x.toFixed(1)},${h-padB} L${points[0].x.toFixed(1)},${h-padB} Z`;
+  // linear regression (least squares) for trend line
+  const xs=data.map((_,i)=>i);
+  const nPts=xs.length;
+  const sumX=xs.reduce((a,b)=>a+b,0),sumY=vals.reduce((a,b)=>a+b,0);
+  const sumXY=xs.reduce((s,x,i)=>s+x*vals[i],0);
+  const sumXX=xs.reduce((s,x)=>s+x*x,0);
+  const denom=(nPts*sumXX-sumX*sumX)||1;
+  const slope=(nPts*sumXY-sumX*sumY)/denom;
+  const intercept=(sumY-slope*sumX)/nPts;
+  const trendStart={x:points[0].x,y:scaleY(intercept)};
+  const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
+  const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
+  const showLabel=(i)=>n<=8||i===0||i===n-1||i%2===0;
+  const circles=points.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="${color}"/>${showLabel(i)?`<text x="${p.x}" y="${p.y-10}" font-size="11" font-weight="700" fill="${color}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`).join('');
+  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-8}" font-size="9" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
+  const up=delta>0,flat=delta===0;
+  const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
+  const arrow=flat?'→':up?'▲':'▼';
+  const trendDir=slope>0.01?'rising':slope<-0.01?'falling':'flat';
+  const trendColor=trendDir==='rising'?'#B91C1C':trendDir==='falling'?'#1B6B2A':'#8A9E8A';
+  return `<div class="card"><div class="flex-between" style="margin-bottom:10px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:11px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)} over period</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px;display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:16px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:10px;color:var(--muted)">Linear trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(1)}/report)</span></div></div>`;
+}
+function setTrendRange(r){state.trendRange=r;render()}
+function goalChart(data,key,label,color,goal,fmt,footnote){
+  fmt=fmt||(v=>String(v));
+  const w=680,h=180,padL=34,padR=20,padT=28,padB=28;
+  const vals=data.map(t=>t[key]);
+  const maxV=Math.max(...vals,goal)*1.18;
+  const n=data.length;
+  const stepX=n>1?(w-padL-padR)/(n-1):0;
+  const scaleY=v=>h-padB-(v/maxV)*(h-padT-padB);
+  const points=data.map((t,i)=>({x:padL+i*stepX,y:scaleY(t[key]),v:t[key],date:t.date}));
+  const pathD=points.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const areaD=`${pathD} L${points[points.length-1].x.toFixed(1)},${h-padB} L${points[0].x.toFixed(1)},${h-padB} Z`;
+  const xs=data.map((_,i)=>i);
+  const nPts=xs.length;
+  const sumX=xs.reduce((a,b)=>a+b,0),sumY=vals.reduce((a,b)=>a+b,0);
+  const sumXY=xs.reduce((s,x,i)=>s+x*vals[i],0);
+  const sumXX=xs.reduce((s,x)=>s+x*x,0);
+  const denom=(nPts*sumXX-sumX*sumX)||1;
+  const slope=(nPts*sumXY-sumX*sumY)/denom;
+  const intercept=(sumY-slope*sumX)/nPts;
+  const trendStart={x:points[0].x,y:scaleY(intercept)};
+  const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
+  const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
+  const goalY=scaleY(goal);
+  const showLabel=(i)=>n<=8||i===0||i===n-1||i%2===0;
+  const circles=points.map((p,i)=>{const over=p.v>goal;const pc=over?'#B91C1C':color;return `<circle cx="${p.x}" cy="${p.y}" r="${over?5:4}" fill="${pc}"${over?' stroke="#fff" stroke-width="1"':''}/>${showLabel(i)?`<text x="${p.x}" y="${p.y-10}" font-size="11" font-weight="700" fill="${pc}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
+  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-8}" font-size="9" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
+  const up=delta>0,flat=Math.abs(delta)<0.005;
+  const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
+  const arrow=flat?'→':up?'▲':'▼';
+  const trendDir=slope>0.005?'rising':slope<-0.005?'falling':'flat';
+  const trendColor=trendDir==='rising'?'#B91C1C':trendDir==='falling'?'#1B6B2A':'#8A9E8A';
+  const trendEndVal=intercept+slope*(n-1);
+  const trendBelowGoal=trendEndVal<=goal;
+  const anyExceeded=vals.some(v=>v>goal);
+  let statusBadge;
+  if(!anyExceeded){
+    statusBadge=`<span style="color:#1B6B2A;font-weight:700">✓ Under goal all period</span>`;
+  } else if(last<=goal){
+    statusBadge=`<span style="color:#1B6B2A;font-weight:700">✓ Currently under goal</span> <span style="color:var(--muted);font-weight:500">(exceeded earlier in period)</span>`;
+  } else {
+    statusBadge=`<span style="color:#B91C1C;font-weight:700">⚠ Currently above goal</span>`;
+  }
+  const trendNote=`<span style="color:${trendBelowGoal?'#1B6B2A':'#B91C1C'};font-weight:700">${trendBelowGoal?'✓':'⚠'} ${n===12?'90-day':n+'-report'} trend line is ${trendBelowGoal?'below':'above'} goal</span> <span style="color:var(--muted);font-weight:500">(trajectory: ${fmt(trendEndVal)} vs. ${fmt(goal)} goal)</span>`;
+  return `<div class="card"><div class="flex-between" style="margin-bottom:10px;flex-wrap:wrap;gap:6px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:11px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)} over period</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px;display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${w-padR}" y2="${goalY.toFixed(1)}" stroke="#D4A017" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${w-padR}" y="${(goalY-6).toFixed(1)}" font-size="10" font-weight="700" fill="#D4A017" text-anchor="end" font-family="'JetBrains Mono',monospace">Goal: ${esc(fmt(goal))}</text><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div class="mono" style="font-size:11px;margin-top:6px">${trendNote}</div><div class="flex-between" style="margin-top:6px;flex-wrap:wrap;gap:8px"><div style="display:flex;align-items:center;gap:6px"><span style="width:16px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:10px;color:var(--muted)">Linear trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(2)}%/report)</span></div><span class="mono" style="font-size:10px">${statusBadge}</span></div>${footnote?`<div class="mono" style="font-size:9.5px;color:#8A9E8A;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">${esc(footnote)}</div>`:''}</div>`;
+}
+function renderTrends(){
+  const data=state.trendRange==="4w"?TREND.slice(-4):TREND;
+  const first=data[0],last=data[data.length-1];
+  let o=`<div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px"><span class="grotesk" style="font-size:13px;font-weight:700">${data.length}-Point Trend · ${esc(first.date)} → ${esc(last.date)}</span><div class="tab-bar" style="margin-bottom:0"><button class="tab-btn ${state.trendRange==='4w'?'active':''}" onclick="setTrendRange('4w')">Last 4 Reports</button><button class="tab-btn ${state.trendRange==='90d'?'active':''}" onclick="setTrendRange('90d')">Full History (90d)</button></div></div>`;
+  o+=`<div class="kpi-strip">${statHTML("Total Overdue",last.total,`${first.date} → ${last.date}`,"#1B6B2A","Σ",last.total-first.total)}${statHTML("Critical (>90d)",last.crit,`${first.date} → ${last.date}`,"#B91C1C","!",last.crit-first.crit)}${statHTML("No Open WO",last.noWO,`${first.date} → ${last.date}`,"#D4A017","⚠",last.noWO-first.noWO)}${statHTML("Avg Days Overdue",last.avg,`${first.date} → ${last.date}`,"#C2410C","μ",last.avg-first.avg)}</div>`;
+  const pctData=data.map(t=>({...t,pct:+(t.total/t.fleet*100).toFixed(2)}));
+  o+=goalChart(pctData,'pct','% of Fleet Overdue (Goal: ≤5% — Industry-Leading Fleet Performance)','#14522A',5,v=>v.toFixed(2)+'%','Goal reflects industry-cited "leading fleet" PM performance tier (~95-100% on-time PM compliance), not a formal regulatory or engineering standard. Source figures are vendor/industry benchmark reports (2026); treat as directional, not authoritative.');
+  o+=trendChart(data,'total','Total Overdue Assets','#1B6B2A');
+  o+=trendChart(data,'crit','Critical Assets (&gt;90d Overdue)','#B91C1C');
+  o+=trendChart(data,'noWO','Assets Without an Open Work Order','#D4A017');
+  o+=trendChart(data,'avg','Average Days Overdue','#C2410C',v=>v+'d');
+  o+=trendChart(data,'worst','Worst-Case Days Overdue','#6B8E23',v=>v+'d');
+  const rows=data.map(t=>`<tr><td class="mono" style="font-weight:700">${esc(t.date)}</td><td class="mono">${t.total}</td><td class="mono" style="color:#B91C1C">${t.crit}</td><td class="mono" style="color:#D4A017">${t.noWO}</td><td class="mono">${t.avg}d</td><td class="mono">${t.worst}d</td></tr>`).join('');
+  o+=`<div class="card"><div class="grotesk" style="font-size:12px;font-weight:700;margin-bottom:12px">Snapshot Data</div><div style="overflow-x:auto"><table><thead><tr><th>Report Date</th><th>Total Overdue</th><th>Critical</th><th>No Open WO</th><th>Avg Overdue</th><th>Worst Overdue</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  return o;
+}
 function handleSort(col){if(state.sortCol===col)state.sortDir=state.sortDir==="desc"?"asc":"desc";else{state.sortCol=col;state.sortDir="desc"}render()}
 function switchTab(tab){state.tab=tab;state.search="";state.sortCol="overdue";state.sortDir="desc";if(tab!=="regions"){state.openRegions={};state.openStores={}}render()}
-function render(){const now=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});const tabs=[{id:"summary",l:"Summary"},{id:"regions",l:"Region / Store"},{id:"emails",l:"Email Drafts"}];let tb=tabs.map(t=>`<button class="tab-btn ${state.tab===t.id?'active':''}" onclick="switchTab('${t.id}')">${t.l}</button>`).join('');let content=state.tab==="summary"?renderSummary():state.tab==="regions"?renderRegions():renderEmails();document.getElementById('app').innerHTML=`<div class="header-bar"><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span class="live-dot"></span><span class="mono" style="font-size:11px;color:var(--yellow);font-weight:700;letter-spacing:1.5px;text-transform:uppercase">OVERDUE ASSETS — LIVE</span></div><h1>PM Compliance Dashboard</h1><p class="sub">McCoy's Building Supply · Fleet Preventive Maintenance · ${DATA.length} overdue of ${TOTAL_FLEET.toLocaleString()} assets (${(DATA.length/TOTAL_FLEET*100).toFixed(1)}%)</p></div><div class="date"><div>Report generated</div><strong>${now}</strong></div></div><div class="accent-stripe"></div><div class="tab-bar">${tb}</div>${content}`}
+function render(){const now=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});const tabs=[{id:"summary",l:"Summary"},{id:"regions",l:"Region / Store"},{id:"emails",l:"Email Drafts"},{id:"trends",l:"Trends"}];let tb=tabs.map(t=>`<button class="tab-btn ${state.tab===t.id?'active':''}" onclick="switchTab('${t.id}')">${t.l}</button>`).join('');let content=state.tab==="summary"?renderSummary():state.tab==="regions"?renderRegions():state.tab==="emails"?renderEmails():renderTrends();document.getElementById('app').innerHTML=`<div class="header-bar"><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span class="live-dot"></span><span class="mono" style="font-size:11px;color:var(--yellow);font-weight:700;letter-spacing:1.5px;text-transform:uppercase">OVERDUE ASSETS — LIVE</span></div><h1>PM Compliance Dashboard</h1><p class="sub">McCoy's Building Supply · Fleet Preventive Maintenance · ${DATA.length} overdue of ${TOTAL_FLEET.toLocaleString()} assets (${(DATA.length/TOTAL_FLEET*100).toFixed(1)}%)</p></div><div class="date"><div>Report generated</div><strong>${now}</strong></div></div><div class="accent-stripe"></div><div class="tab-bar">${tb}</div>${content}`}
 render();
 </script>
 </body>
