@@ -257,11 +257,13 @@ function renderEmails(){
   </div>`;
   return o;
 }
+function parseMDY(s){const[m,d,y]=s.split('/').map(Number);return new Date(y,m-1,d)}
+function daysBetween(a,b){return Math.round((parseMDY(b)-parseMDY(a))/86400000)}
 function trendChart(data,key,label,color,fmt){
   fmt=fmt||(v=>String(v));
-  const w=440,h=210,padL=28,padR=14,padT=26,padB=24;
+  const w=440,h=185,padL=22,padR=14,padT=36,padB=22;
   const vals=data.map(t=>t[key]);
-  const maxV=Math.max(...vals,1);
+  const maxV=Math.max(...vals,1)*1.2;
   const n=data.length;
   const stepX=n>1?(w-padL-padR)/(n-1):0;
   const scaleY=v=>h-padB-(v/maxV)*(h-padT-padB);
@@ -280,21 +282,25 @@ function trendChart(data,key,label,color,fmt){
   const trendStart={x:points[0].x,y:scaleY(intercept)};
   const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
   const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
-  const showLabel=(i)=>n<=5||i===0||i===n-1||i%3===0;
-  const circles=points.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="${color}"/>${showLabel(i)?`<text x="${p.x}" y="${p.y-9}" font-size="10" font-weight="700" fill="${color}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`).join('');
-  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-7}" font-size="8.5" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
-  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
-  const up=delta>0,flat=delta===0;
-  const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
-  const arrow=flat?'→':up?'▲':'▼';
   const trendDir=slope>0.01?'rising':slope<-0.01?'falling':'flat';
   const trendColor=trendDir==='rising'?'#B91C1C':trendDir==='falling'?'#1B6B2A':'#8A9E8A';
-  return `<div class="card" style="margin-bottom:0"><div class="flex-between" style="margin-bottom:8px;flex-wrap:wrap;gap:4px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:10.5px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:14px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:9.5px;color:var(--muted)">Trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(1)}/report)</span></div></div>`;
+  const showLabel=(i)=>n<=9||i===0||i===n-1||i%2===0;
+  const circles=points.map((p,i)=>{const isLast=i===n-1;const yOff=i%2===0?-13:-8;return `<circle cx="${p.x}" cy="${p.y}" r="${isLast?4:3}" fill="${color}"/>${showLabel(i)?`<text x="${p.x}" y="${(p.y+yOff).toFixed(1)}" font-size="8" font-weight="700" fill="${color}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
+  const dateLabels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-6}" font-size="6.5" fill="#8A9E8A" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
+  const pctChange=first!==0?(delta/Math.abs(first)*100):0;
+  const flat=delta===0,worse=delta>0;
+  const dC=flat?'#5C715C':worse?'#B91C1C':'#1B6B2A';
+  const arrow=flat?'→':worse?'▲':'▼';
+  const trendPhrase=flat?'Holding steady':worse?'Trending the wrong way':'Trending the right way';
+  const daySpan=daysBetween(data[0].date,data[n-1].date);
+  const ceilingY=padT-8;
+  return `<div class="card" style="margin-bottom:0"><div class="mono" style="font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:5px">${esc(label)}</div><div class="grotesk" style="font-size:26px;font-weight:800;color:${color};line-height:1;margin-bottom:5px">${esc(fmt(last))}</div><div style="font-size:11px;margin-bottom:10px"><span style="font-weight:700;color:${dC}">${arrow} ${esc(fmt(Math.abs(delta)))} (${pctChange>=0?'+':''}${pctChange.toFixed(0)}%)</span> <span style="color:var(--muted)">since ${esc(data[0].date.slice(0,5))}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><line x1="${padL}" y1="${ceilingY}" x2="${w-padR}" y2="${ceilingY}" stroke="#D4DDD0" stroke-width="1" stroke-dasharray="2,4"/><path d="${areaD}" fill="${color}" opacity="0.06"/><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.6"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2"/>${circles}${dateLabels}</svg><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10.5px;color:var(--muted)">${trendPhrase} — ${esc(fmt(Math.abs(delta)))} (${pctChange>=0?'+':''}${pctChange.toFixed(0)}%) over the last ${daySpan} days.</div></div>`;
 }
 function setTrendRange(r){state.trendRange=r;render()}
 function goalChart(data,key,label,color,goal,fmt,footnote){
   fmt=fmt||(v=>String(v));
-  const w=440,h=225,padL=30,padR=40,padT=26,padB=24;
+  const w=440,h=200,padL=24,padR=40,padT=36,padB=22;
   const vals=data.map(t=>t[key]);
   const maxV=Math.max(...vals,goal)*1.18;
   const n=data.length;
@@ -314,16 +320,19 @@ function goalChart(data,key,label,color,goal,fmt,footnote){
   const trendStart={x:points[0].x,y:scaleY(intercept)};
   const trendEnd={x:points[n-1].x,y:scaleY(intercept+slope*(n-1))};
   const trendLineD=`M${trendStart.x.toFixed(1)},${trendStart.y.toFixed(1)} L${trendEnd.x.toFixed(1)},${trendEnd.y.toFixed(1)}`;
-  const goalY=scaleY(goal);
-  const showLabel=(i)=>n<=5||i===0||i===n-1||i%3===0;
-  const circles=points.map((p,i)=>{const over=p.v>goal;const pc=over?'#B91C1C':color;return `<circle cx="${p.x}" cy="${p.y}" r="${over?4.5:3.5}" fill="${pc}"${over?' stroke="#fff" stroke-width="1"':''}/>${showLabel(i)?`<text x="${p.x}" y="${p.y-9}" font-size="10" font-weight="700" fill="${pc}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
-  const labels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-7}" font-size="8.5" fill="#5C715C" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
-  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
-  const up=delta>0,flat=Math.abs(delta)<0.005;
-  const dC=flat?'#5C715C':up?'#B91C1C':'#1B6B2A';
-  const arrow=flat?'→':up?'▲':'▼';
   const trendDir=slope>0.005?'rising':slope<-0.005?'falling':'flat';
   const trendColor=trendDir==='rising'?'#B91C1C':trendDir==='falling'?'#1B6B2A':'#8A9E8A';
+  const goalY=scaleY(goal);
+  const showLabel=(i)=>n<=9||i===0||i===n-1||i%2===0;
+  const circles=points.map((p,i)=>{const over=p.v>goal;const pc=over?'#B91C1C':color;const isLast=i===n-1;const yOff=i%2===0?-13:-8;return `<circle cx="${p.x}" cy="${p.y}" r="${over?4.5:(isLast?4:3)}" fill="${pc}"${over?' stroke="#fff" stroke-width="1"':''}/>${showLabel(i)?`<text x="${p.x}" y="${(p.y+yOff).toFixed(1)}" font-size="8" font-weight="700" fill="${pc}" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(fmt(p.v))}</text>`:''}`}).join('');
+  const dateLabels=points.map((p,i)=>showLabel(i)?`<text x="${p.x}" y="${h-6}" font-size="6.5" fill="#8A9E8A" text-anchor="middle" font-family="'JetBrains Mono',monospace">${esc(p.date.slice(0,5))}</text>`:'').join('');
+  const first=vals[0],last=vals[vals.length-1];const delta=last-first;
+  const pctChange=first!==0?(delta/Math.abs(first)*100):0;
+  const flat=Math.abs(delta)<0.005,worse=delta>0;
+  const dC=flat?'#5C715C':worse?'#B91C1C':'#1B6B2A';
+  const arrow=flat?'→':worse?'▲':'▼';
+  const trendPhrase=flat?'Holding steady':worse?'Trending the wrong way':'Trending the right way';
+  const daySpan=daysBetween(data[0].date,data[n-1].date);
   const trendEndVal=intercept+slope*(n-1);
   const trendBelowGoal=trendEndVal<=goal;
   const anyExceeded=vals.some(v=>v>goal);
@@ -331,12 +340,12 @@ function goalChart(data,key,label,color,goal,fmt,footnote){
   if(!anyExceeded){
     statusBadge=`<span style="color:#1B6B2A;font-weight:700">✓ Under goal all period</span>`;
   } else if(last<=goal){
-    statusBadge=`<span style="color:#1B6B2A;font-weight:700">✓ Currently under goal</span> <span style="color:var(--muted);font-weight:500">(exceeded earlier in period)</span>`;
+    statusBadge=`<span style="color:#1B6B2A;font-weight:700">✓ Currently under goal</span> <span style="color:var(--muted);font-weight:500">(exceeded earlier)</span>`;
   } else {
     statusBadge=`<span style="color:#B91C1C;font-weight:700">⚠ Currently above goal</span>`;
   }
-  const trendNote=`<span style="color:${trendBelowGoal?'#1B6B2A':'#B91C1C'};font-weight:700">${trendBelowGoal?'✓':'⚠'} Trend is ${trendBelowGoal?'below':'above'} goal</span> <span style="color:var(--muted);font-weight:500">(${fmt(trendEndVal)} vs. ${fmt(goal)})</span>`;
-  return `<div class="card" style="margin-bottom:0"><div class="flex-between" style="margin-bottom:8px;flex-wrap:wrap;gap:4px"><span class="grotesk" style="font-size:12px;font-weight:700">${esc(label)}</span><span class="mono" style="font-size:10.5px;font-weight:700;color:${dC}">${arrow} ${delta>0?'+':''}${fmt(delta)}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><path d="${areaD}" fill="${color}" opacity="0.08"/><line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${w-padR}" y2="${goalY.toFixed(1)}" stroke="#D4A017" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${w-4}" y="${(goalY-12).toFixed(1)}" font-size="9" font-weight="700" fill="#D4A017" text-anchor="end" font-family="'JetBrains Mono',monospace">Goal: ${esc(fmt(goal))}</text><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="2" stroke-dasharray="6,5" opacity="0.75"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5"/>${circles}${labels}</svg><div class="mono" style="font-size:9.5px;margin-top:5px">${trendNote}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><span style="width:14px;height:0;border-top:2px dashed ${trendColor};display:inline-block"></span><span class="mono" style="font-size:9.5px;color:var(--muted)">Trend: ${trendDir} (${slope>0?'+':''}${slope.toFixed(2)}%/report)</span></div><div class="mono" style="font-size:9.5px;margin-top:4px">${statusBadge}</div>${footnote?`<div class="mono" style="font-size:8.5px;color:#8A9E8A;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">${esc(footnote)}</div>`:''}</div>`;
+  const ceilingY=padT-8;
+  return `<div class="card" style="margin-bottom:0"><div class="mono" style="font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:5px">${esc(label)}</div><div class="grotesk" style="font-size:26px;font-weight:800;color:${color};line-height:1;margin-bottom:5px">${esc(fmt(last))}</div><div style="font-size:11px;margin-bottom:10px"><span style="font-weight:700;color:${dC}">${arrow} ${esc(fmt(Math.abs(delta)))} (${pctChange>=0?'+':''}${pctChange.toFixed(0)}%)</span> <span style="color:var(--muted)">since ${esc(data[0].date.slice(0,5))}</span></div><svg viewBox="0 0 ${w} ${h}" style="width:100%;aspect-ratio:${w}/${h};display:block"><line x1="${padL}" y1="${ceilingY}" x2="${w-padR}" y2="${ceilingY}" stroke="#D4DDD0" stroke-width="1" stroke-dasharray="2,4"/><path d="${areaD}" fill="${color}" opacity="0.06"/><line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${w-padR}" y2="${goalY.toFixed(1)}" stroke="#D4A017" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${w-4}" y="${(goalY-9).toFixed(1)}" font-size="9" font-weight="700" fill="#D4A017" text-anchor="end" font-family="'JetBrains Mono',monospace">Goal: ${esc(fmt(goal))}</text><path d="${trendLineD}" fill="none" stroke="${trendColor}" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.6"/><path d="${pathD}" fill="none" stroke="${color}" stroke-width="2"/>${circles}${dateLabels}</svg><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10.5px;color:var(--muted)">${trendPhrase} — ${esc(fmt(Math.abs(delta)))} (${pctChange>=0?'+':''}${pctChange.toFixed(0)}%) over the last ${daySpan} days.</div><div class="mono" style="font-size:9.5px;margin-top:6px">${statusBadge}</div>${footnote?`<div class="mono" style="font-size:8.5px;color:#8A9E8A;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">${esc(footnote)}</div>`:''}</div>`;
 }
 function renderTrends(){
   const data=state.trendRange==="4w"?TREND.slice(-4):TREND;
