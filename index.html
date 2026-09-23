@@ -94,6 +94,7 @@ const DATA=[
 {store:"359 Burnet Reload",region:"Distribution",asset:"384011",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/17/2026",daysSince:158,interval:150,overdue:8,hasOpenWO:true,openWO:720950},
 {store:"061 Mt. Pleasant",region:"Region 01",asset:"696011",cls:"Truck",type:"20' Slide Flatbed",lastDate:"06/18/2026",daysSince:96,interval:90,overdue:6,hasOpenWO:true,openWO:722185},
 {store:"032 Palestine",region:"Region 01",asset:"240004",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/20/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:723318},
+{store:"004 League City",region:"Region 03",asset:"752015",cls:"Truck",type:"24' TA Flatbed",lastDate:"04/21/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:724641},
 {store:"058 Gonzales",region:"Region 04",asset:"381078",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/21/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:724637},
 {store:"061 Mt. Pleasant",region:"Region 01",asset:"381079",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/21/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:724636},
 {store:"111 Floresville",region:"Region 07",asset:"751002",cls:"Truck",type:"24' TA Flatbed",lastDate:"04/21/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:724640},
@@ -107,7 +108,7 @@ const DATA=[
 {store:"072 Paris",region:"Region 01",asset:"381082",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/23/2026",daysSince:152,interval:150,overdue:2,hasOpenWO:true,openWO:727010},
 {store:"450 McCoys Millworks",region:"Millwork",asset:"531010",cls:"Trailer",type:"Van Trailer",lastDate:"04/24/2026",daysSince:151,interval:150,overdue:1,hasOpenWO:true,openWO:727414}
 ];
-const FLEET={Forklift:487,Truck:399,Trailer:232,TMFL:222,"LD Vehicle":113};
+const FLEET={Forklift:486,Truck:401,Trailer:232,TMFL:221,"LD Vehicle":113};
 const TOTAL_FLEET=Object.values(FLEET).reduce((a,b)=>a+b,0);
 const MAXOV=Math.max(...DATA.map(r=>r.overdue));
 const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution","Millwork","Headquarters"];
@@ -129,7 +130,7 @@ const TREND=[
 {date:"08/27/2026",total:17,crit:0,noWO:0,avg:18,worst:69,fleet:1453},
 {date:"09/07/2026",total:33,crit:0,noWO:0,avg:14,worst:80,fleet:1453},
 {date:"09/14/2026",total:39,crit:0,noWO:0,avg:13,worst:87,fleet:1453},
-{date:"09/22/2026",total:38,crit:0,noWO:0,avg:12,worst:61,fleet:1453}
+{date:"09/22/2026",total:39,crit:0,noWO:0,avg:11,worst:61,fleet:1453}
 ];
 const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22",Distribution:"#5C715C",Headquarters:"#4A7C59",Millwork:"#B8860B"};
 const CC={Truck:"#1B6B2A",Trailer:"#D4A017",TMFL:"#14522A","LD Vehicle":"#6B8E23",Forklift:"#B8860B"};
