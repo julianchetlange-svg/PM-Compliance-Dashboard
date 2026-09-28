@@ -85,19 +85,19 @@ const DATA=[
 {store:"067 Terrell",region:"Region 02",asset:"241001",cls:"TMFL",type:"4-Way Truck Mounted Forklift",lastDate:"04/14/2026",daysSince:167,interval:150,overdue:17,hasOpenWO:true,openWO:714573},
 {store:"069 Austin 290 West",region:"Region 08",asset:"244004",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/15/2026",daysSince:166,interval:150,overdue:16,hasOpenWO:true,openWO:718298},
 {store:"008 Stephenville",region:"Region 02",asset:"694021",cls:"Truck",type:"20' Slide Flatbed",lastDate:"04/16/2026",daysSince:165,interval:150,overdue:15,hasOpenWO:true,openWO:720593},
-{store:"359 Burnet Reload",region:"Distribution",asset:"384011",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/17/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:720950},
+{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"384011",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/17/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:720950},
 {store:"004 League City",region:"Region 03",asset:"752015",cls:"Truck",type:"24' TA Flatbed",lastDate:"04/21/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:724641},
-{store:"353 Dayton Distribution",region:"Distribution",asset:"755032",cls:"Truck",type:"Tractor TA",lastDate:"04/21/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:724642},
+{store:"353 Dayton Distribution",region:"Distribution / Millwork",asset:"755032",cls:"Truck",type:"Tractor TA",lastDate:"04/21/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:724642},
 {store:"070 San Marcos",region:"Region 07",asset:"755015",cls:"Truck",type:"24' TA Flatbed",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725773},
 {store:"118 Spicewood",region:"Region 08",asset:"485011",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725767},
-{store:"450 McCoys Millworks",region:"Millwork",asset:"382033",cls:"Forklift",type:"Scissor Lift",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725756},
-{store:"450 McCoys Millworks",region:"Millwork",asset:"382055",cls:"Forklift",type:"6K Yard Forklift",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725758},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"382033",cls:"Forklift",type:"Scissor Lift",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725756},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"382055",cls:"Forklift",type:"6K Yard Forklift",lastDate:"04/22/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:725758},
 {store:"067 Terrell",region:"Region 02",asset:"15694",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/23/2026",daysSince:158,interval:150,overdue:8,hasOpenWO:true,openWO:727013},
 {store:"072 Paris",region:"Region 01",asset:"381082",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/23/2026",daysSince:158,interval:150,overdue:8,hasOpenWO:true,openWO:727010},
-{store:"450 McCoys Millworks",region:"Millwork",asset:"531010",cls:"Trailer",type:"Van Trailer",lastDate:"04/24/2026",daysSince:157,interval:150,overdue:7,hasOpenWO:true,openWO:727414},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"531010",cls:"Trailer",type:"Van Trailer",lastDate:"04/24/2026",daysSince:157,interval:150,overdue:7,hasOpenWO:true,openWO:727414},
 {store:"070 San Marcos",region:"Region 07",asset:"696013",cls:"Truck",type:"20' Slide Flatbed",lastDate:"06/26/2026",daysSince:94,interval:90,overdue:4,hasOpenWO:true,openWO:729663},
 {store:"071 Nacogdoches",region:"Region 01",asset:"247019",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/27/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:729657},
-{store:"450 McCoys Millworks",region:"Millwork",asset:"532018",cls:"Trailer",type:"Van Trailer",lastDate:"04/27/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:727415},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"532018",cls:"Trailer",type:"Van Trailer",lastDate:"04/27/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:727415},
 {store:"730 Store Development",region:"Headquarters",asset:"487089",cls:"Trailer",type:"Millwork Trailer",lastDate:"04/27/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:729659},
 {store:"040 Beeville",region:"Region 04",asset:"244024",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/28/2026",daysSince:153,interval:150,overdue:3,hasOpenWO:true,openWO:730478},
 {store:"040 Beeville",region:"Region 04",asset:"384021",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/28/2026",daysSince:153,interval:150,overdue:3,hasOpenWO:true,openWO:730477},
@@ -116,7 +116,7 @@ const DATA=[
 const FLEET={Forklift:486,Truck:401,Trailer:232,TMFL:221,"LD Vehicle":113};
 const TOTAL_FLEET=Object.values(FLEET).reduce((a,b)=>a+b,0);
 const MAXOV=Math.max(...DATA.map(r=>r.overdue));
-const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution","Millwork","Headquarters"];
+const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution / Millwork","Headquarters"];
 const PRIOR={total:39,crit:0,noWO:0,avg:11,worst:61};
 const TREND=[
 {date:"05/19/2026",total:73,crit:6,noWO:16,avg:32,worst:175,fleet:1525},
@@ -138,7 +138,7 @@ const TREND=[
 {date:"09/22/2026",total:39,crit:0,noWO:0,avg:11,worst:61,fleet:1453},
 {date:"09/28/2026",total:43,crit:0,noWO:0,avg:13,worst:67,fleet:1453}
 ];
-const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22",Distribution:"#5C715C",Headquarters:"#4A7C59",Millwork:"#B8860B"};
+const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22","Distribution / Millwork":"#5C715C",Headquarters:"#4A7C59"};
 const CC={Truck:"#1B6B2A",Trailer:"#D4A017",TMFL:"#14522A","LD Vehicle":"#6B8E23",Forklift:"#B8860B"};
 const SEV=d=>{if(d>90)return{l:"Critical",c:"#B91C1C",bg:"rgba(185,28,28,0.10)"};if(d>60)return{l:"High",c:"#C2410C",bg:"rgba(194,65,12,0.08)"};if(d>30)return{l:"Medium",c:"#B45309",bg:"rgba(180,83,9,0.08)"};return{l:"Low",c:"#1B6B2A",bg:"rgba(27,107,42,0.08)"}};
 const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
