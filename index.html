@@ -68,49 +68,56 @@ input::placeholder{color:#8A9E8A}
 <div id="app"></div>
 <script>
 const DATA=[
-{store:"067 Terrell",region:"Region 02",asset:"211004",cls:"Trailer",type:"Millwork Trailer",lastDate:"03/25/2026",daysSince:197,interval:150,overdue:47,hasOpenWO:true,openWO:718303},
-{store:"067 Terrell",region:"Region 02",asset:"750036",cls:"Truck",type:"Tractor TA",lastDate:"03/31/2026",daysSince:191,interval:150,overdue:41,hasOpenWO:true,openWO:705406},
-{store:"008 Stephenville",region:"Region 02",asset:"211002",cls:"Trailer",type:"Millwork Trailer",lastDate:"04/02/2026",daysSince:189,interval:150,overdue:39,hasOpenWO:true,openWO:732720},
-{store:"018 Abilene",region:"Region 02",asset:"211026",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/09/2026",daysSince:182,interval:150,overdue:32,hasOpenWO:true,openWO:738950},
-{store:"018 Abilene",region:"Region 02",asset:"211024",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/13/2026",daysSince:178,interval:150,overdue:28,hasOpenWO:true,openWO:743353},
-{store:"034 Bryan",region:"Region 01",asset:"480003",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/13/2026",daysSince:178,interval:150,overdue:28,hasOpenWO:true,openWO:716983},
-{store:"057 Tomball",region:"Region 03",asset:"212011",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/13/2026",daysSince:178,interval:150,overdue:28,hasOpenWO:true,openWO:743354},
-{store:"067 Terrell",region:"Region 02",asset:"241001",cls:"TMFL",type:"4-Way Truck Mounted Forklift",lastDate:"04/14/2026",daysSince:177,interval:150,overdue:27,hasOpenWO:true,openWO:714573},
-{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"384011",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/17/2026",daysSince:174,interval:150,overdue:24,hasOpenWO:true,openWO:720950},
-{store:"067 Terrell",region:"Region 02",asset:"15694",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/23/2026",daysSince:168,interval:150,overdue:18,hasOpenWO:true,openWO:727013},
-{store:"072 Paris",region:"Region 01",asset:"381082",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/23/2026",daysSince:168,interval:150,overdue:18,hasOpenWO:true,openWO:727010},
-{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"531010",cls:"Trailer",type:"Van Trailer",lastDate:"04/24/2026",daysSince:167,interval:150,overdue:17,hasOpenWO:true,openWO:727414},
-{store:"071 Nacogdoches",region:"Region 01",asset:"247019",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/27/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:729657},
-{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"532018",cls:"Trailer",type:"Van Trailer",lastDate:"04/27/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:727415},
-{store:"730 Store Development",region:"Headquarters",asset:"487089",cls:"Trailer",type:"Millwork Trailer",lastDate:"04/27/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:729659},
-{store:"044 Kerrville",region:"Region 07",asset:"243025",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/29/2026",daysSince:162,interval:150,overdue:12,hasOpenWO:true,openWO:731401},
-{store:"071 Nacogdoches",region:"Region 01",asset:"241022",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/01/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:729658},
-{store:"018 Abilene",region:"Region 02",asset:"697031",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/02/2026",daysSince:98,interval:90,overdue:8,hasOpenWO:true,openWO:733797},
-{store:"018 Abilene",region:"Region 02",asset:"698018",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/02/2026",daysSince:98,interval:90,overdue:8,hasOpenWO:true,openWO:733796},
-{store:"074 Bee Cave",region:"Region 08",asset:"753032",cls:"Truck",type:"Tractor TA",lastDate:"05/05/2026",daysSince:156,interval:150,overdue:6,hasOpenWO:true,openWO:736360},
-{store:"115 Midlothian",region:"Region 02",asset:"381085",cls:"Forklift",type:"8K Yard Forklift",lastDate:"05/05/2026",daysSince:156,interval:150,overdue:6,hasOpenWO:true,openWO:736353},
-{store:"120 Lockhart",region:"Region 07",asset:"246011",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/05/2026",daysSince:156,interval:150,overdue:6,hasOpenWO:true,openWO:736356},
-{store:"039 Longview",region:"Region 01",asset:"755008",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/06/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:737404},
-{store:"055 Georgetown",region:"Region 08",asset:"749019",cls:"Truck",type:"Tractor TA",lastDate:"05/06/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:737410},
-{store:"055 Georgetown",region:"Region 08",asset:"755016",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/06/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:737402},
-{store:"069 Austin 290 West",region:"Region 08",asset:"383099",cls:"Forklift",type:"6K Yard Forklift",lastDate:"05/06/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:737376},
-{store:"083 Duncan",region:"Region 02",asset:"756011",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/06/2026",daysSince:155,interval:150,overdue:5,hasOpenWO:true,openWO:737403},
-{store:"043 Huntsville",region:"Region 01",asset:"694010",cls:"Truck",type:"20' Slide Flatbed",lastDate:"05/07/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:738569},
-{store:"062 Austin Manchaca",region:"Region 08",asset:"754001",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/07/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:738572},
-{store:"062 Austin Manchaca",region:"Region 08",asset:"756013",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/07/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:738573},
-{store:"113 Montgomery",region:"Region 03",asset:"750018",cls:"Truck",type:"Tractor TA",lastDate:"05/07/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:738574},
-{store:"011 South Austin",region:"Region 08",asset:"754006",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/08/2026",daysSince:153,interval:150,overdue:3,hasOpenWO:true,openWO:738900},
-{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"750006",cls:"Truck",type:"Tractor TA",lastDate:"07/07/2026",daysSince:93,interval:90,overdue:3,hasOpenWO:true,openWO:747333},
-{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"752016",cls:"Truck",type:"Tractor SA",lastDate:"07/07/2026",daysSince:93,interval:90,overdue:3,hasOpenWO:true,openWO:747337},
-{store:"489 EWP Program",region:"Distribution / Millwork",asset:"755031",cls:"Truck",type:"Tractor TA",lastDate:"07/07/2026",daysSince:93,interval:90,overdue:3,hasOpenWO:true,openWO:747330},
-{store:"029 S Corpus Christi",region:"Region 04",asset:"697007",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/08/2026",daysSince:92,interval:90,overdue:2,hasOpenWO:true,openWO:738951}
+{store:"067 Terrell",region:"Region 02",asset:"211004",cls:"Trailer",type:"Millwork Trailer",lastDate:"03/25/2026",daysSince:201,interval:150,overdue:51,hasOpenWO:true,openWO:718303},
+{store:"008 Stephenville",region:"Region 02",asset:"211002",cls:"Trailer",type:"Millwork Trailer",lastDate:"04/02/2026",daysSince:193,interval:150,overdue:43,hasOpenWO:true,openWO:732720},
+{store:"018 Abilene",region:"Region 02",asset:"211026",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/09/2026",daysSince:186,interval:150,overdue:36,hasOpenWO:true,openWO:738950},
+{store:"018 Abilene",region:"Region 02",asset:"211024",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/13/2026",daysSince:182,interval:150,overdue:32,hasOpenWO:true,openWO:743353},
+{store:"034 Bryan",region:"Region 01",asset:"480003",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/13/2026",daysSince:182,interval:150,overdue:32,hasOpenWO:true,openWO:716983},
+{store:"057 Tomball",region:"Region 03",asset:"212011",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/13/2026",daysSince:182,interval:150,overdue:32,hasOpenWO:true,openWO:743354},
+{store:"067 Terrell",region:"Region 02",asset:"241001",cls:"TMFL",type:"4-Way Truck Mounted Forklift",lastDate:"04/14/2026",daysSince:181,interval:150,overdue:31,hasOpenWO:true,openWO:714573},
+{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"384011",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/17/2026",daysSince:178,interval:150,overdue:28,hasOpenWO:true,openWO:720950},
+{store:"067 Terrell",region:"Region 02",asset:"15694",cls:"Trailer",type:"Flatbed Trailer",lastDate:"04/23/2026",daysSince:172,interval:150,overdue:22,hasOpenWO:true,openWO:727013},
+{store:"072 Paris",region:"Region 01",asset:"381082",cls:"Forklift",type:"8K Yard Forklift",lastDate:"04/23/2026",daysSince:172,interval:150,overdue:22,hasOpenWO:true,openWO:727010},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"531010",cls:"Trailer",type:"Van Trailer",lastDate:"04/24/2026",daysSince:171,interval:150,overdue:21,hasOpenWO:true,openWO:727414},
+{store:"071 Nacogdoches",region:"Region 01",asset:"247019",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/27/2026",daysSince:168,interval:150,overdue:18,hasOpenWO:true,openWO:729657},
+{store:"450 McCoys Millworks",region:"Distribution / Millwork",asset:"532018",cls:"Trailer",type:"Van Trailer",lastDate:"04/27/2026",daysSince:168,interval:150,overdue:18,hasOpenWO:true,openWO:727415},
+{store:"730 Store Development",region:"Headquarters",asset:"487089",cls:"Trailer",type:"Millwork Trailer",lastDate:"04/27/2026",daysSince:168,interval:150,overdue:18,hasOpenWO:true,openWO:729659},
+{store:"028 Baytown",region:"Region 03",asset:"212007",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/28/2026",daysSince:167,interval:150,overdue:17,hasOpenWO:true,openWO:756555},
+{store:"044 Kerrville",region:"Region 07",asset:"243025",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"04/29/2026",daysSince:166,interval:150,overdue:16,hasOpenWO:true,openWO:731401},
+{store:"082 Ardmore",region:"Region 02",asset:"211017",cls:"Trailer",type:"Open Air Trailer",lastDate:"04/29/2026",daysSince:166,interval:150,overdue:16,hasOpenWO:true,openWO:757015},
+{store:"071 Nacogdoches",region:"Region 01",asset:"241022",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/01/2026",daysSince:164,interval:150,overdue:14,hasOpenWO:true,openWO:729658},
+{store:"018 Abilene",region:"Region 02",asset:"697031",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/02/2026",daysSince:102,interval:90,overdue:12,hasOpenWO:true,openWO:733797},
+{store:"018 Abilene",region:"Region 02",asset:"698018",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/02/2026",daysSince:102,interval:90,overdue:12,hasOpenWO:true,openWO:733796},
+{store:"074 Bee Cave",region:"Region 08",asset:"753032",cls:"Truck",type:"Tractor TA",lastDate:"05/05/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:736360},
+{store:"115 Midlothian",region:"Region 02",asset:"381085",cls:"Forklift",type:"8K Yard Forklift",lastDate:"05/05/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:736353},
+{store:"120 Lockhart",region:"Region 07",asset:"246011",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/05/2026",daysSince:160,interval:150,overdue:10,hasOpenWO:true,openWO:736356},
+{store:"039 Longview",region:"Region 01",asset:"755008",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/06/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:737404},
+{store:"069 Austin 290 West",region:"Region 08",asset:"383099",cls:"Forklift",type:"6K Yard Forklift",lastDate:"05/06/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:737376},
+{store:"083 Duncan",region:"Region 02",asset:"756011",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/06/2026",daysSince:159,interval:150,overdue:9,hasOpenWO:true,openWO:737403},
+{store:"062 Austin Manchaca",region:"Region 08",asset:"754001",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/07/2026",daysSince:158,interval:150,overdue:8,hasOpenWO:true,openWO:738572},
+{store:"062 Austin Manchaca",region:"Region 08",asset:"756013",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/07/2026",daysSince:158,interval:150,overdue:8,hasOpenWO:true,openWO:738573},
+{store:"011 South Austin",region:"Region 08",asset:"754006",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/08/2026",daysSince:157,interval:150,overdue:7,hasOpenWO:true,openWO:738900},
+{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"750006",cls:"Truck",type:"Tractor TA",lastDate:"07/07/2026",daysSince:97,interval:90,overdue:7,hasOpenWO:true,openWO:747333},
+{store:"359 Burnet Reload",region:"Distribution / Millwork",asset:"752016",cls:"Truck",type:"Tractor SA",lastDate:"07/07/2026",daysSince:97,interval:90,overdue:7,hasOpenWO:true,openWO:747337},
+{store:"489 EWP Program",region:"Distribution / Millwork",asset:"755031",cls:"Truck",type:"Tractor TA",lastDate:"07/07/2026",daysSince:97,interval:90,overdue:7,hasOpenWO:true,openWO:747330},
+{store:"029 S Corpus Christi",region:"Region 04",asset:"697007",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/08/2026",daysSince:96,interval:90,overdue:6,hasOpenWO:true,openWO:738951},
+{store:"011 South Austin",region:"Region 08",asset:"757004",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/11/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:738899},
+{store:"025 NW San Antonio",region:"Region 07",asset:"697005",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/10/2026",daysSince:94,interval:90,overdue:4,hasOpenWO:true,openWO:741272},
+{store:"121 New Caney",region:"Region 03",asset:"753019",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/11/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:741268},
+{store:"735 Fleet",region:"Headquarters",asset:"11724",cls:"Trailer",type:"Flatbed Trailer",lastDate:"05/11/2026",daysSince:154,interval:150,overdue:4,hasOpenWO:true,openWO:741267},
+{store:"003 Brazoria",region:"Region 04",asset:"755003",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/13/2026",daysSince:152,interval:150,overdue:2,hasOpenWO:true,openWO:743356},
+{store:"112 Dayton",region:"Region 03",asset:"752012",cls:"Truck",type:"24' TA Flatbed",lastDate:"05/13/2026",daysSince:152,interval:150,overdue:2,hasOpenWO:true,openWO:743357},
+{store:"044 Kerrville",region:"Region 07",asset:"244026",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/14/2026",daysSince:151,interval:150,overdue:1,hasOpenWO:true,openWO:744373},
+{store:"044 Kerrville",region:"Region 07",asset:"246006",cls:"TMFL",type:"Truck Mounted Forklift",lastDate:"05/14/2026",daysSince:151,interval:150,overdue:1,hasOpenWO:true,openWO:744374},
+{store:"044 Kerrville",region:"Region 07",asset:"384014",cls:"Forklift",type:"8K Yard Forklift",lastDate:"05/14/2026",daysSince:151,interval:150,overdue:1,hasOpenWO:true,openWO:744369},
+{store:"121 New Caney",region:"Region 03",asset:"697010",cls:"Truck",type:"20' Slide Flatbed",lastDate:"07/13/2026",daysSince:91,interval:90,overdue:1,hasOpenWO:true,openWO:744376}
 ];
 
-const FLEET={Forklift:486,Truck:401,Trailer:232,TMFL:221,"LD Vehicle":113};
+const FLEET={Forklift:485,Truck:382,Trailer:224,TMFL:205,"LD Vehicle":111,"Ancillary Fleet":13};
 const TOTAL_FLEET=Object.values(FLEET).reduce((a,b)=>a+b,0);
 const MAXOV=Math.max(...DATA.map(r=>r.overdue));
 const REGION_ORDER=["Region 01","Region 02","Region 03","Region 04","Region 05","Region 06","Region 07","Region 08","Distribution / Millwork","Headquarters"];
-const PRIOR={total:46,crit:0,noWO:0,avg:11,worst:44};
+const PRIOR={total:36,crit:0,noWO:0,avg:14,worst:47};
 const TREND=[
 {date:"05/19/2026",total:73,crit:6,noWO:16,avg:32,worst:175,fleet:1525},
 {date:"05/25/2026",total:67,crit:6,noWO:15,avg:32,worst:206,fleet:1525},
@@ -131,7 +138,8 @@ const TREND=[
 {date:"09/22/2026",total:39,crit:0,noWO:0,avg:11,worst:61,fleet:1453},
 {date:"09/28/2026",total:43,crit:0,noWO:0,avg:13,worst:67,fleet:1453},
 {date:"10/05/2026",total:46,crit:0,noWO:0,avg:11,worst:44,fleet:1453},
-{date:"10/08/2026",total:36,crit:0,noWO:0,avg:14,worst:47,fleet:1453}
+{date:"10/08/2026",total:36,crit:0,noWO:0,avg:14,worst:47,fleet:1453},
+{date:"10/12/2026",total:43,crit:0,noWO:0,avg:14,worst:51,fleet:1420}
 ];
 const RC={"Region 01":"#1B6B2A","Region 02":"#2D8B3E","Region 03":"#D4A017","Region 04":"#3A9E50","Region 05":"#8B6914","Region 06":"#14522A","Region 07":"#6B8E23","Region 08":"#228B22","Distribution / Millwork":"#5C715C",Headquarters:"#4A7C59"};
 const CC={Truck:"#1B6B2A",Trailer:"#D4A017",TMFL:"#14522A","LD Vehicle":"#6B8E23",Forklift:"#B8860B"};
